@@ -375,7 +375,7 @@ function do_factorization(alg::CholeskyFactorization, A, b, u)
     return fact
 end
 
-function init_cacheval(alg::CholeskyFactorization, A::SMatrix{S1, S2}, b, u, Pl, Pr,
+function init_cacheval(alg::CholeskyFactorization, A::Union{<:SMatrix{S1, S2},MMatrix{S1, S2}}, b, u, Pl, Pr,
         maxiters::Int, abstol, reltol, verbose::Bool,
         assumptions::OperatorAssumptions) where {S1, S2}
     cholesky(A)

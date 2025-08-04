@@ -29,7 +29,7 @@ using Libdl: Libdl, dlsym_e
 import InteractiveUtils
 import RecursiveArrayTools
 
-import StaticArraysCore: StaticArray, SVector, SMatrix
+import StaticArraysCore: StaticArray, SVector, SMatrix, MMatrix
 
 using LinearAlgebra.LAPACK: chkfinite, chkstride1,
                             @blasfunc, chkargsok
