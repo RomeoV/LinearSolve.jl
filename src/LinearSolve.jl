@@ -43,17 +43,18 @@ import Krylov
 
 const CRC = ChainRulesCore
 
-@static if Sys.ARCH === :x86_64 || Sys.ARCH === :i686
-    if Preferences.@load_preference("LoadMKL_JLL",
-        !occursin("EPYC", Sys.cpu_info()[1].model))
-        using MKL_jll
-        const usemkl = MKL_jll.is_available()
-    else
-        const usemkl = false
-    end
-else
-    const usemkl = false
-end
+# @static if Sys.ARCH === :x86_64 || Sys.ARCH === :i686
+#     if Preferences.@load_preference("LoadMKL_JLL",
+#         !occursin("EPYC", Sys.cpu_info()[1].model))
+#         using MKL_jll
+#         const usemkl = MKL_jll.is_available()
+#     else
+#         const usemkl = false
+#     end
+# else
+#     const usemkl = false
+# end
+const usemkl = false
 
 @reexport using SciMLBase
 
@@ -154,7 +155,7 @@ include("common.jl")
 include("extension_algs.jl")
 include("factorization.jl")
 include("appleaccelerate.jl")
-include("mkl.jl")
+# include("mkl.jl")
 include("simplelu.jl")
 include("simplegmres.jl")
 include("iterative_wrappers.jl")
