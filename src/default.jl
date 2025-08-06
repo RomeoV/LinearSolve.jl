@@ -18,6 +18,7 @@ mutable struct DefaultLinearSolverInit{T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, 
     CholeskyFactorization::T15
     NormalCholeskyFactorization::T16
     AppleAccelerateLUFactorization::T17
+    MKLLUFactorization::T18
     QRFactorizationPivoted::T19
     KrylovJL_CRAIGMR::T20
     KrylovJL_LSMR::T21
@@ -184,6 +185,9 @@ function defaultalg(A, b, assump::OperatorAssumptions{Bool})
                     DefaultAlgorithmChoice.RFLUFactorization
                     #elseif A === nothing || A isa Matrix
                     #    alg = FastLUFactorization()
+                elseif usemkl && b isa Array &&
+                       eltype(b) <: Union{Float32, Float64, ComplexF32, ComplexF64}
+                    DefaultAlgorithmChoice.MKLLUFactorization
                 else
                     DefaultAlgorithmChoice.LUFactorization
                 end
@@ -191,6 +195,9 @@ function defaultalg(A, b, assump::OperatorAssumptions{Bool})
                 DefaultAlgorithmChoice.QRFactorization
             elseif __conditioning(assump) === OperatorCondition.SuperIllConditioned
                 DefaultAlgorithmChoice.SVDFactorization
+            elseif usemkl && (A === nothing ? eltype(b) <: BLASELTYPES :
+                    eltype(A) <: BLASELTYPES)
+                DefaultAlgorithmChoice.MKLLUFactorization
             else
                 DefaultAlgorithmChoice.LUFactorization
             end
@@ -235,6 +242,8 @@ function algchoice_to_alg(alg::Symbol)
         LDLtFactorization()
     elseif alg === :LUFactorization
         LUFactorization()
+    elseif alg === :MKLLUFactorization
+        MKLLUFactorization()
     elseif alg === :QRFactorization
         QRFactorization()
     elseif alg === :DiagonalFactorization
