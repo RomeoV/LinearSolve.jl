@@ -321,7 +321,7 @@ function __init(prob::LinearProblem, alg::SciMLLinearSolveAlgorithm,
     elseif issparsematrixcsc(A)
         make_SparseMatrixCSC(A)
     else
-        deepcopy(A)
+        RecursiveArrayTools.recursivecopy(A)
     end
 
     if verbose isa Bool
@@ -346,7 +346,7 @@ function __init(prob::LinearProblem, alg::SciMLLinearSolveAlgorithm,
         # Extension must be loaded if issparsematrixcsc returns true
         make_SparseMatrixCSC(b)
     else
-        deepcopy(b)
+        RecursiveArrayTools.recursivecopy(b)
     end
 
     u0_ = u0 !== nothing ? u0 : __init_u0_from_Ab(A, b)
